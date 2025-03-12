@@ -4,9 +4,8 @@ import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-
+app.config['UPLOAD_FOLDER'] = os.path.join('/Users/vineeth/PycharmProjects/Assesment','UPLOAD_FOLDER')
 ALLOWED_EXTENSIONS = {"csv"}
-
 @app.route('/')
 def upload():
     return render_template('upload.html')
@@ -22,13 +21,12 @@ def upload_data():
         file = request.files["file"]
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'],filename)
             file.save(filepath)
-        if Model.upload(data=filepath):
+            model=Model()
+        if model.upload(data=filepath):
             return jsonify({'Message':'uploaded successfully!'}),200
         return jsonify({'message': 'Something went wrong'}), 400
-
-
 
 
 
